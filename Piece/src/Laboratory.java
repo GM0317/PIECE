@@ -88,19 +88,19 @@ public class Laboratory extends Stage{
 		        int newX = playerX;
 		        int newY = playerY;
 		        
-		        // 각 경계와의 충돌을 확인
 		        for (Rectangle boundary : tileLine) {
 		            if (playerBox.intersects(boundary)) {
 		                // 충돌이 발생하면 플레이어의 위치를 조정
-		            	if (playerX < boundary.x) {
+		                if (playerX < boundary.x) {
 		                    newX = boundary.x - playerBox.width; // 왼쪽 충돌: 왼쪽으로 위치 조정
-		                } else if (playerX > boundary.x + boundary.width) {
+		                } else if (playerX + playerBox.width > boundary.x + boundary.width) {
 		                    newX = boundary.x + boundary.width; // 오른쪽 충돌: 오른쪽으로 위치 조정
 		                }
 		                if (playerY < boundary.y) {
 		                    newY = boundary.y - playerBox.height; // 위쪽 충돌: 위로 위치 조정
-		                } else if (playerY > boundary.y + boundary.height) {
+		                } else if (playerY + playerBox.height > boundary.y + boundary.height) {
 		                    newY = boundary.y + boundary.height; // 아래쪽 충돌: 아래로 위치 조정
+		                    onGround = true; // 아래쪽 충돌이면 바닥에 있다고 판단
 		                }
 		                System.out.println("충돌 발생!");
 		            }
