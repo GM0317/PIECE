@@ -33,6 +33,10 @@ public class Player implements KeyListener{
 	private int state = 0;
 	private int x;
 	private int y;
+	private int width; // 추가: 캐릭터의 가로 길이
+	private int height; // 추가: 캐릭터의 세로 길이
+	private int previousX;
+    private int previousY;
 	
 	private int stamina = 100; // 스테미너 초기값
 	private int maxStamina = 100; // 최대 스테미너
@@ -45,6 +49,9 @@ public class Player implements KeyListener{
 	private boolean isFlip = false; // 캐릭터가 반전 중인지 여부
 	private boolean isJump = false; // 캐릭터가 점프 중인지 여부
 	private boolean flip = false;
+	
+	
+	public static final int HORIZONTAL_MOVE = 0;
 	
 	private LinkedList<Attack> attackList = new LinkedList<>();
 	public Player() {
@@ -181,7 +188,7 @@ public class Player implements KeyListener{
 		this.attack = new Attack(0, 0, 1, 2);
 		this.hp = new PlayerHp();
 		this.x = 30;
-		this.y = 250;
+		this.y = 390;
 		
 	}
 	public LinkedList<Attack> getAttackList() {
@@ -281,12 +288,29 @@ public class Player implements KeyListener{
     public void setX(int newX) {
         x = newX;
     }
+    public int getWidth() {
+        return this.width;
+    }
+    public int getHeight() {
+        return this.height;
+    }
     public boolean isFlip() {
         return flip;
     }
     public void setIsJump(boolean isJump) {
         this.isJump = isJump;
     }
+    public boolean isJump() {
+        return isJump;
+    }
+    public int getPreviousX() {
+        return previousX;
+    }
+
+    public int getPreviousY() {
+        return previousY;
+    }
+
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -300,13 +324,21 @@ public class Player implements KeyListener{
 		{
 		case KeyEvent.VK_LEFT:
             this.flip = true; // 왼쪽 키 눌렸을 때 flip을 true로 설정하여 이미지 반전
+            previousX = x; // 왼쪽으로 이동하기 전의 X 좌표 기록
 			x -= 6;
 			System.out.println("왼쪽");
 			break;
 		case KeyEvent.VK_RIGHT:
             this.flip = false; // 오른쪽 키 눌렸을 때 flip을 false로 설정하여 이미지 반전 해제
+            previousX = x; // 오른쪽으로 이동하기 전의 X 좌표 기록
 			x += 6;
 			System.out.println("오른쪽");
+			break;
+		case KeyEvent.VK_DOWN:
+			y += 6;
+			break;
+		case KeyEvent.VK_UP:
+			y -= 6;
 			break;
 		case KeyEvent.VK_SPACE:
             if (!isJump && stamina >= 20) { // 스테미너가 충분하고 점프를 하지 않은 상태일 때
@@ -332,6 +364,8 @@ public class Player implements KeyListener{
 		    break;
         }
 	}
+	
+
 	//Stamina//
 	public void update() {
         long currentTime = System.currentTimeMillis();
@@ -396,6 +430,7 @@ public class Player implements KeyListener{
 	public Rectangle getRect() {
 		return new Rectangle(x, y, this.states[state].width, this.states[state].height);
 	}
+	
 	public void draw(Graphics g, GameCanvas gameCanvas) {
 		update();
 		//updateStamina();
@@ -425,6 +460,7 @@ public class Player implements KeyListener{
 			attack.move();
 			attack.draw(g, gameCanvas);
 		}
+		
 		clearAttack(gameCanvas);
 		drawCharacter(getState(), g, gameCanvas);
 	}

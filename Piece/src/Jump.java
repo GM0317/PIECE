@@ -11,10 +11,10 @@ public class Jump extends Thread {
 
     @Override
     public void run() {
-        int originalY = player.getY(); // Store initial y-coordinate
-        int originalX = player.getX(); // Store initial x-coordinate
+        int originalY = player.getY(); // 초기 y좌표
+        int originalX = player.getX(); // 초기 x좌표
 
-        // Jumping upwards part until reaching the jump height
+        // 점프 높이에 도달할 때까지의 위쪽 점프 부분
         for (int i = 0; i < JUMP_HEIGHT; i++) {
             player.setY(player.getY() - 1); // Move the player upwards
 
@@ -32,8 +32,8 @@ public class Jump extends Thread {
             }
         }
 
-        // Apply gravity for the downward movement
-        while (player.getY() < originalY) {
+        // 아래로 이동하는 움직임에 중력을 적용
+        for (int i=0; i<JUMP_HEIGHT; i++) {
             player.setY((int) (player.getY() + GRAVITY)); // Apply gravity to move the player downwards
 
             // Move horizontally based on the player's direction (left or right)
@@ -50,7 +50,7 @@ public class Jump extends Thread {
             }
         }
 
-        // Set isJump to false once the jump is finished
+        // 점프가 완료되면 isJump를 false로 설정
         player.setIsJump(false);
     }
 }
